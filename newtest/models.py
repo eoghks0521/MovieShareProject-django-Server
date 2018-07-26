@@ -20,3 +20,28 @@ class Client(models.Model):
 	def was_published_recently(self):
 		return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
+
+class PassId(models.Model):
+	passid = models.CharField(max_length=50)
+
+	def __str__(self):
+		return self.passid
+
+class Media(models.Model):
+
+   #clientid = models.ForeignKey(Client, on_delete=models.CASCADE)
+   clientid = models.CharField(max_length=50, default = "1")
+   img = models.ImageField(upload_to='img/', default='')
+   video = models.FileField(upload_to='video/', default='')
+
+
+   #def __init__(self, img, video):
+   #   self.img = img
+   #   self.author = author
+
+   #def __str__(self):
+   #   return "__str__"
+
+
+   def __str__(self):
+      return self.clientid
