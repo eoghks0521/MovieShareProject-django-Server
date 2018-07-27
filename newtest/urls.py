@@ -16,7 +16,8 @@ router.register(r'post', views.PassIdViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^', include(router.urls)),
-    url(r'^test', views.upload_file),
+    url(r'^test/.+$', views.upload_file),
+    url(r'^test2/.+$',views.show_file),
     url(r'^api-auth/', include('rest_framework.urls')),
 
 ]

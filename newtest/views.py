@@ -46,13 +46,38 @@ class ClientViewSet(viewsets.ModelViewSet):
 
 
 def upload_file(request):
-   if request.method == 'POST':
-      img = request.FILES['img']
-      video = request.FILES['video']
-      fs = FileSystemStorage()
-      #filename = fs.save(img.name, img)
+	if request.method == 'POST':
+		clientid = request.POST.get("clientid",False)
+		img = request.FILES['img']
+		video = request.FILES['video']
+		fs = FileSystemStorage()
+		#filename = fs.save(img.name, img)
+		file = Media(clientid = clientid, 
+			img = img, 
+			video = video
+			)
+		file.save()
 
-      file = Media(clientid = '1', img = img, video = video)
-      file.save()
+		return render(request, 'newtest/index.html')
 
-   return render(request, 'newtest/index.html')
+	else :
+		#print(request.path.split('/')[2])
+		context = { 'clientid' : request.path.split('/')[2] 			
+		}
+
+		return render(request, 'newtest/index.html', context)
+
+
+def show_file(request):
+	
+	if(request.method=='GET') :
+		medias = Media.objects.filter(clientid = request.path.split('/')[2])
+
+		context = { 'clientid' : request.path.split('/')[2] ,
+					'medias' : medias
+		}
+
+		return render(request, 'newtest/index2.html', context)
+
+	else:
+		return render(request, 'newtest/index2.html')
