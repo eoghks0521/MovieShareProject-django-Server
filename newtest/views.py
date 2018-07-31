@@ -45,6 +45,8 @@ class ClientViewSet(viewsets.ModelViewSet):
 	serializer_class = ClientSerializer
 
 
+
+
 def upload_file(request):
 	if request.method == 'POST':
 		clientid = request.POST.get("clientid",False)
@@ -81,3 +83,65 @@ def show_file(request):
 
 	else:
 		return render(request, 'newtest/index2.html')
+
+
+
+
+def friend_add(request):
+	if request.method == 'POST':
+		clientid = request.POST.get("friendid",False)
+		friendid = request.POST.get("clientid",False)
+		fs = FileSystemStorage()
+		#filename = fs.save(img.name, img)
+		file = FriendAddList(
+			clientid = clientid, 
+			friendid = friendid
+			)
+
+		file.save()
+
+		return render(request, 'newtest/friend.html')
+
+	else :
+
+		addlist = FriendAddList.objects.filter(clientid = request.path.split('/')[2])
+		flist = FriendList.objects.filter(clientid = request.path.split('/')[2])
+		print(flist)
+		context = { 'clientid' : request.path.split('/')[2], 
+					'addlist' : addlist, 
+					'flist' : flist,	
+		}
+
+		return render(request, 'newtest/friend.html', context)
+
+
+def friend_list(request):
+
+	if request.POST.get("yes",False) == '1':
+		clientid = request.POST.get("clientid",False)
+		friendid = request.POST.get("friendid",False)
+		fs = FileSystemStorage()
+		#filename = fs.save(img.name, img)
+		file = FriendList(
+			clientid = clientid, 
+			friendid = friendid
+			)
+		print(file)
+		file.save()
+
+		#friendAddList에 있는 목록 삭제 
+		f_list = FriendAddList.objects.filter(clientid=clientid)
+		for f in f_list :
+			f.delete()
+
+		return render(request, 'newtest/friend.html')
+
+	else :
+
+		clientid = request.POST.get("clientid",False)
+
+		f_list = FriendAddList.objects.filter(clientid=clientid)
+		for f in f_list :
+			f.delete()
+
+		return render(request, 'newtest/friend.html')

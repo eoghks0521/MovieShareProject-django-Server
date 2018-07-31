@@ -34,8 +34,7 @@ class Media(models.Model):
    img = models.ImageField(upload_to='img/', default='')
    video = models.FileField(upload_to='video/', default='')
 
-
-   #def __init__(self, img, video):
+      #def __init__(self, img, video):
    #   self.img = img
    #   self.author = author
 
@@ -45,3 +44,22 @@ class Media(models.Model):
 
    def __str__(self):
       return self.clientid
+
+
+class FriendList(models.Model):
+
+	clientid = models.CharField(max_length=50)
+	friendid = models.CharField(max_length=50)
+
+	def __str__(self):
+		return self.clientid
+
+class FriendAddList(models.Model):
+
+	clientid = models.CharField(max_length=50)
+	friendid = models.CharField(max_length=50)
+
+	def __str__(self):
+		return self.clientid
+
+

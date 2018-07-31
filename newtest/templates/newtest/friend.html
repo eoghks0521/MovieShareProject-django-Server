@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action = "../friendadd/" method="post" >
+	{% csrf_token %}
+추가할 ID: <input type="text" name="friendid">
+<input type="submit" value="보내기">
+<input type="hidden" name ="clientid" value="{{clientid}}">
+</form>
+{% for a in flist %}
+      {{a.friendid}}
+      <br>
+{%endfor%}
+
+{% for add in addlist %}
+      {{add.friendid}}
+ <form action = "../../friendlist/", method="post">
+ 	{% csrf_token %}
+ 	<input type="hidden" name ="clientid" value="{{clientid}}">
+ 	<input type="hidden" name ="friendid" value="{{add.friendid}}">
+     <input type="hidden" name ="yes" value=1>
+     <input type= "submit" value="수락">
+</form>
+<form action = "../../friendlist/", method="post">
+	{% csrf_token %}
+	<input type="hidden" name ="clientid" value="{{clientid}}">
+	<input type="hidden" name ="friendid" value="{{add.friendid}}">
+	<input type="hidden" name="yes", value=0>
+	<input type="submit" value="거절">
+{%endfor%}
+
+</body>
+</html>
