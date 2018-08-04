@@ -1,5 +1,4 @@
 import datetime
-
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
@@ -10,6 +9,7 @@ from django.conf import settings
 
 class Client(models.Model):
 
+	#clientid = models.CharField(max_length=50, primary_key=True)
 	clientid = models.CharField(max_length=50)
 	password = models.CharField(max_length=50)
 	pub_date = models.DateTimeField(default=timezone.now)
@@ -29,10 +29,11 @@ class PassId(models.Model):
 
 class Media(models.Model):
 
-   #clientid = models.ForeignKey(Client, on_delete=models.CASCADE)
-   clientid = models.CharField(max_length=50, default = "1")
-   img = models.ImageField(upload_to='img/', default='')
-   video = models.FileField(upload_to='video/', default='')
+
+   	#clientid = models.ForeignKey(Client, on_delete=models.CASCADE, default="1")
+   	clientid = models.CharField(max_length=50, default = "1")
+   	img = models.ImageField(upload_to='img/', default='')
+   	video = models.FileField(upload_to='video/', default='')
 
       #def __init__(self, img, video):
    #   self.img = img
@@ -42,8 +43,8 @@ class Media(models.Model):
    #   return "__str__"
 
 
-   def __str__(self):
-      return self.clientid
+   	def __str__(self):
+   		return self.clientid
 
 
 class FriendList(models.Model):

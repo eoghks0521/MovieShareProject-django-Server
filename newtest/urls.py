@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^friendadd/',views.friend_add),
     url(r'^api-auth/', include('rest_framework.urls')),
     url(r'^friendlist/', views.friend_list),
+    url(r'^ajaxpass/', views.ajaxpass),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -52,6 +52,7 @@ def upload_file(request):
 		clientid = request.POST.get("clientid",False)
 		img = request.FILES['img']
 		video = request.FILES['video']
+
 		fs = FileSystemStorage()
 		#filename = fs.save(img.name, img)
 		file = Media(clientid = clientid, 
@@ -91,6 +92,9 @@ def friend_add(request):
 	if request.method == 'POST':
 		clientid = request.POST.get("friendid",False)
 		friendid = request.POST.get("clientid",False)
+		print(clientid, friendid)
+
+
 		fs = FileSystemStorage()
 		#filename = fs.save(img.name, img)
 		file = FriendAddList(
@@ -100,13 +104,23 @@ def friend_add(request):
 
 		file.save()
 
-		return render(request, 'newtest/friend.html')
+		addlist = FriendAddList.objects.filter(clientid = friendid)
+		flist = FriendList.objects.filter(clientid = friendid)
+		#print(flist)
+		context = { 'clientid' : friendid, 
+					'addlist' : addlist, 
+					'flist' : flist,	
+		}
+		print(context)
+
+
+		return render(request, 'newtest/friend.html', context)
 
 	else :
 
 		addlist = FriendAddList.objects.filter(clientid = request.path.split('/')[2])
 		flist = FriendList.objects.filter(clientid = request.path.split('/')[2])
-		print(flist)
+		#print(flist)
 		context = { 'clientid' : request.path.split('/')[2], 
 					'addlist' : addlist, 
 					'flist' : flist,	
@@ -126,22 +140,65 @@ def friend_list(request):
 			clientid = clientid, 
 			friendid = friendid
 			)
-		print(file)
+		file2 = FriendList(
+			clientid = friendid, 
+			friendid = clientid
+			)		
 		file.save()
+		file2.save()
 
 		#friendAddList에 있는 목록 삭제 
-		f_list = FriendAddList.objects.filter(clientid=clientid)
+		f_list = FriendAddList.objects.filter(clientid=clientid,friendid=friendid)
 		for f in f_list :
 			f.delete()
 
-		return render(request, 'newtest/friend.html')
+		addlist = FriendAddList.objects.filter(clientid = clientid)
+		flist = FriendList.objects.filter(clientid = clientid)
+		context = { 'clientid' : clientid, 
+					'addlist' : addlist, 
+					'flist' : flist,	
+		}
+		print(context)
+
+		return render(request, 'newtest/friend.html', context)
 
 	else :
 
 		clientid = request.POST.get("clientid",False)
+		friendid = request.POST.get("friendid",False)
 
-		f_list = FriendAddList.objects.filter(clientid=clientid)
+		f_list = FriendAddList.objects.filter(clientid=clientid,friendid=friendid)
 		for f in f_list :
 			f.delete()
 
-		return render(request, 'newtest/friend.html')
+		addlist = FriendAddList.objects.filter(clientid = clientid)
+		flist = FriendList.objects.filter(clientid = clientid)
+		context = { 'clientid' : clientid, 
+					'addlist' : addlist, 
+					'flist' : flist,	
+		}
+
+		return render(request, 'newtest/friend.html', context)
+
+def ajaxpass(request):
+	friendid = request.GET.get('friendid', None)
+	clientid = request.GET.get('clientid', None)
+	print(friendid, clientid)
+
+	getfriend = FriendList.objects.filter(clientid = clientid)
+	exfriend = Client.objects.filter(clientid = friendid)
+
+	print(getfriend)
+	print(exfriend)
+
+	for a in exfriend :
+		for b in getfriend :
+			if b.friendid == clientid : 
+				context = {'hihi' : '1' }
+				return JSONResponse(context)
+
+		context = {'hihi' : '3' }
+		return JSONResponse(context)
+
+	context = {'hihi' : '2'}
+	return JSONResponse(context)
