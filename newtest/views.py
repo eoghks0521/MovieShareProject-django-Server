@@ -160,9 +160,9 @@ def friend_list(request):
 		}
 		print(context)
 
-		return render(request, 'newtest/friend.html', context)
+		return render(request, 'newtest/friendadd.html', context)
 
-	else :
+	elif request.POST.get("no",False) == '0':
 
 		clientid = request.POST.get("clientid",False)
 		friendid = request.POST.get("friendid",False)
@@ -178,7 +178,19 @@ def friend_list(request):
 					'flist' : flist,	
 		}
 
-		return render(request, 'newtest/friend.html', context)
+		return render(request, 'newtest/friendadd.html', context)
+
+	else :
+
+		addlist = FriendAddList.objects.filter(clientid = request.path.split('/')[2])
+		flist = FriendList.objects.filter(clientid = request.path.split('/')[2])
+		print(flist)
+		context = { 'clientid' : request.path.split('/')[2], 
+					'addlist' : addlist, 
+					'flist' : flist,	
+		}
+
+		return render(request,'newtest/friendadd.html',context)
 
 def ajaxpass(request):
 	friendid = request.GET.get('friendid', None)
@@ -190,6 +202,10 @@ def ajaxpass(request):
 
 	print(getfriend)
 	print(exfriend)
+
+	if friendid == clientid :
+		context = {'hihi': '4' }
+		return JSONResponse(context)
 
 	for a in exfriend :
 		for b in getfriend :

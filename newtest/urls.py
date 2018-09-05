@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^test/.+$', views.upload_file),
     url(r'^test2/.+$',views.show_file),
     url(r'^friendadd/.+$',views.friend_add),
+    url(r'^friendadd2/.+$',views.friend_list),
     url(r'^friendadd/',views.friend_add),
     url(r'^api-auth/', include('rest_framework.urls')),
     url(r'^friendlist/', views.friend_list),
