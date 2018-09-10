@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
 <script type="text/javascript">
 	
-	function check(this){
-		alert(this);
-		alert(this.yes);
-		if(this.yes.value == "1"){
+	function check(num){
+
+		if(num.yes.value == "1"){
 			alert("수락하셨습니다.")
 			return true;
 		}
@@ -19,8 +19,8 @@
 
 	}
 
-	function check2(this){
-		if(this.no.value == "0"){
+	function check2(num2){
+		if(num2.no.value == "0"){
 			alert("거절하셨습니다.")
 			return true;
 		}
@@ -49,7 +49,7 @@
  <form action = "../../friendlist/" id ="okay" method="post">
  -->
 
- <form action = "../../friendlist/" onsubmit="return check(this);" name=friendadd  id ="{{add.friendid}}" method="post">
+ <form action = "../../friendlist/" onsubmit="return check(this)" name ='{{add.friendid}}' id = '{{add.friendid}}' method="post">
  	{% csrf_token %}
  	<input type="hidden" name ="clientid" value="{{clientid}}">
  	<input type="hidden" name ="friendid" value="{{add.friendid}}">
@@ -63,7 +63,7 @@
 <form action = "../../friendlist/" id=nop method="post">
 -->
 
-<form action = "../../friendlist/" onsubmit="return check2(this);" name=friendadd2 id="{{add.friendid}}2" method="post">
+<form action = "../../friendlist/" onsubmit="return check2(this)" name = '"+{{add.friendid}}+"2' id= '"+{{add.friendid}}+"2' method="post">
 	{% csrf_token %}
 	<input type="hidden" name ="clientid" value="{{clientid}}">
 	<input type="hidden" name ="friendid" value="{{add.friendid}}">
