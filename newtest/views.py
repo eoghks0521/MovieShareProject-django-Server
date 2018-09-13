@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework import viewsets
 from django.core.files.storage import FileSystemStorage
+import cv2
 
 
 class JSONResponse(HttpResponse):
@@ -47,6 +48,17 @@ class ClientViewSet(viewsets.ModelViewSet):
 
 
 
+def get_video_duration(file_path):
+        cap = cv2.VideoCapture(file_path)
+        cap.set(cv2.CAP_PROP_POS_AVI_RATIO,1)
+        num_frames = cap.get(cv2.CAP_PROP_POS_FRAMES)
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        duration = float(num_frames) / float(fps)
+        return int(duration)
+
+
+
+
 def upload_file(request):
 	if request.method == 'POST':
 		clientid = request.POST.get("clientid",False)
@@ -61,11 +73,22 @@ def upload_file(request):
 			)
 		file.save()
 
+
+		ds = get_video_duration('.' + file.video.url)
+
+		if ds <10 or ds>30 :
+			file.delete()
+
+		context = {'ds':ds}
+		
+
+
+
 		return render(request, 'newtest/index.html')
 
 	else :
 		#print(request.path.split('/')[2])
-		context = { 'clientid' : request.path.split('/')[2] 			
+		context = { 'clientid' : request.path.split('/')[2], 'ds':'-1',			
 		}
 
 		return render(request, 'newtest/index.html', context)
