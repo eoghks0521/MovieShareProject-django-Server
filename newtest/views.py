@@ -13,6 +13,8 @@ import cv2
 
 class JSONResponse(HttpResponse):
 
+	print("!!!!!")
+
     def __init__(self, data, **kwargs):
         content = JSONRenderer().render(data, 'application/json; indent=4')
         kwargs['content_type'] = 'application/json'
